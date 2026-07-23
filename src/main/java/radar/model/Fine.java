@@ -28,12 +28,5 @@ public class Fine {
         return total;
     }
 
-    public void print() {
-        System.out.println("Traffic for car " + plateNumber);
-        System.out.println("Total amount: " + getTotalAmount() + " EGP");
-        System.out.println("Violations:");
-        for (Violation v : violations) {
-            System.out.println("- " + v.getDescription() + " : " + v.getFee() + " EGP");
-        }
-    }
+
 }
