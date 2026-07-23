@@ -1,4 +1,4 @@
-package radar.Interface;
+package radar.interfaces;
 
 import radar.model.Car;
 import radar.model.Violation;

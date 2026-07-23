@@ -1,10 +1,10 @@
-package radar.Implementation;
+package radar.implementation;
 
 import radar.model.Car;
 import radar.model.Fine;
 import radar.model.Violation;
-import radar.Interface.IRule;
-import radar.Interface.IRadarService;
+import radar.interfaces.IRule;
+import radar.interfaces.IRadarService;
 
 import java.util.*;
 

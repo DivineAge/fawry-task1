@@ -1,9 +1,9 @@
-package radar.Implementation;
+package radar.implementation;
 
 import radar.model.Car;
 import radar.model.CarType;
 import radar.model.Violation;
-import radar.Interface.IRule;
+import radar.interfaces.IRule;
 import java.util.Optional;
 
 

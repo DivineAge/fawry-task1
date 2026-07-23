@@ -1,8 +1,8 @@
-package radar.Interface;
+package radar.interfaces;
 
 import radar.model.Car;
 import radar.model.Fine;
-import radar.Interface.IRule;
+import radar.interfaces.IRule;
 
 import java.util.List;
 import java.util.Map;
