@@ -1,11 +1,13 @@
-package radar.rules;
+package radar.Implementation;
 
 import radar.model.Car;
 import radar.model.Violation;
+import radar.Interface.IRule;
+
 import java.util.Optional;
 
 
-public class SeatbeltRule implements Rule {
+public class SeatbeltRule implements IRule {
 
     private final int fee;
 

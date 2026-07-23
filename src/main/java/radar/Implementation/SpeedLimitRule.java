@@ -1,12 +1,13 @@
-package radar.rules;
+package radar.Implementation;
 
 import radar.model.Car;
 import radar.model.CarType;
 import radar.model.Violation;
+import radar.Interface.IRule;
 import java.util.Optional;
 
 
-public class SpeedLimitRule implements Rule {
+public class SpeedLimitRule implements IRule {
 
     private final CarType carType;
     private final int maxSpeedKmh;

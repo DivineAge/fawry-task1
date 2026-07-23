@@ -3,10 +3,11 @@ package radar;
 import radar.model.Car;
 import radar.model.CarType;
 import radar.model.Fine;
-import radar.rules.SeatbeltRule;
-import radar.rules.SpeedLimitRule;
-import radar.service.RadarService;
-
+import radar.Interface.IRule;
+import radar.Interface.IRadarService;
+import radar.Implementation.RadarService;
+import radar.Implementation.SpeedLimitRule;
+import radar.Implementation.SeatbeltRule;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -19,16 +20,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // 1. Build the radar service
-        RadarService radar = new RadarService();
+        IRadarService radar = new RadarService();
 
-        // Register rules -- add new ones here without touching anything else
+       
         radar.addRule(new SpeedLimitRule(CarType.PRIVATE, 80,  300));
         radar.addRule(new SpeedLimitRule(CarType.TRUCK,   60,  500));
         radar.addRule(new SpeedLimitRule(CarType.BUS,     70,  400));
         radar.addRule(new SeatbeltRule(100));
 
-        // 2. Feed observations
         List<Car> cars = List.of(
             new Car("ABC1234", LocalDateTime.now(), CarType.PRIVATE, 94,  false),
             new Car("TRK5678", LocalDateTime.now(), CarType.TRUCK,   55,  true),
@@ -50,7 +49,7 @@ public class Main {
             });
         }
 
-        // 3. Summary: all fines
+        
         System.out.println(DIVIDER);
         System.out.println("         ALL FINES SUMMARY            ");
         System.out.println(DIVIDER);
@@ -63,7 +62,7 @@ public class Main {
             }
         }
 
-        // 4. Statistics: violated rules
+        
         System.out.println();
         System.out.println(DIVIDER);
         System.out.println("       VIOLATED RULES STATS           ");

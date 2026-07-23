@@ -1,19 +1,21 @@
-package radar.service;
+package radar.Implementation;
 
 import radar.model.Car;
 import radar.model.Fine;
 import radar.model.Violation;
-import radar.rules.Rule;
+import radar.Interface.IRule;
+import radar.Interface.IRadarService;
 
 import java.util.*;
 
 
-public class RadarService {
+public class RadarService implements IRadarService {
 
-    private final List<Rule> rules = new ArrayList<>();
+    private final List<IRule> rules = new ArrayList<>();
     private final List<Fine> fines = new ArrayList<>();
 
-    public void addRule(Rule rule) {
+    @Override
+    public void addRule(IRule rule) {
         rules.add(rule);
     }
 
@@ -21,7 +23,7 @@ public class RadarService {
     public Optional<Fine> process(Car car) {
         List<Violation> violations = new ArrayList<>();
 
-        for (Rule rule : rules) {
+        for (IRule rule : rules) {
             rule.evaluate(car).ifPresent(violations::add);
         }
 
