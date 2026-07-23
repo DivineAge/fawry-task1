@@ -14,7 +14,7 @@ public class RadarService implements IRadarService {
     private final List<IRule> rules = new ArrayList<>();
     private final List<Fine> fines = new ArrayList<>();
 
-    @Override
+    
     public void addRule(IRule rule) {
         rules.add(rule);
     }
