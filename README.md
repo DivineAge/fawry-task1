@@ -8,28 +8,18 @@
 src/main/java/radar/
 ├── model/
 │   ├── CarType.java          # Enum: PRIVATE | TRUCK | BUS
-│   ├── CarObservation.java   # Data captured by the physical radar
+│   ├── Car.java   # Data captured by the physical radar
 │   ├── Violation.java        # A single rule breach + its fee
 │   └── Fine.java             # Aggregated violations for one plate number
 ├── rules/
-│   ├── Rule.java             # Extension interface (Open/Closed Principle)
+│   ├── Rule.java             # Extension interface
 │   ├── SpeedLimitRule.java   # Enforces max speed per car type
 │   └── SeatbeltRule.java     # Enforces seatbelt requirement
 ├── service/
-│   └── RadarService.java     # Orchestrator: processes observations, stores fines
+│   └── RadarService.java     # Orchestrator: processes car, stores fines
 └── Main.java                 # Demo entry point
 ```
 
----
-
-## Design Principles Applied
-
-| Principle | Where |
-|-----------|-------|
-| **Single Responsibility** | Each class has one job: model data, define a rule, or orchestrate. |
-| **Open / Closed** | `Rule` interface lets you add new rules without modifying `RadarService`. |
-| **Orchestrator** | `RadarService` is the single coordinator — it drives rule evaluation, fine creation, and reporting. |
-| **Dependency Inversion** | `RadarService` depends on the `Rule` abstraction, not on concrete rule classes. |
 ---
 
 ## Class & Method Reference
@@ -75,7 +65,7 @@ Immutable value object representing a single rule breach.
 ---
 
 ### `model/Fine.java`
-Aggregates all `Violation`s for a single observation into one issuable fine.
+Aggregates all `Violation`s for a single car into one issuable fine.
 
 | Field / Method | Type | Description |
 |---|---|---|
@@ -93,7 +83,7 @@ The core extension interface. Implement this to add any new traffic rule.
 
 | Method | Signature | Description |
 |---|---|---|
-| `evaluate` | `Optional<Violation> evaluate(CarObservation)` | Returns a `Violation` if the rule is broken, or `Optional.empty()` if compliant. |
+| `evaluate` | `Optional<Violation> evaluate(Car car)` | Returns a `Violation` if the rule is broken, or `Optional.empty()` if compliant. |
 | `getName` | `String getName()` | Short human-readable rule label used in statistics reports. |
 
 ---
@@ -107,8 +97,7 @@ Enforces a maximum speed for one specific `CarType`.
 | `maxSpeedKmh` | `int` | Maximum allowed speed in km/h. |
 | `fee` | `int` | Fine in EGP charged when the limit is exceeded. |
 
-**Behaviour:** If `obs.getCarType() == carType && obs.getSpeedKmh() > maxSpeedKmh` → returns a `Violation`.  
-**Name:** `"Speed Limit – Private"` / `"Speed Limit – Truck"` / `"Speed Limit – Bus"`.
+
 
 Default limits used in `Main`:
 | Car Type | Max Speed | Fee |
@@ -126,8 +115,6 @@ Enforces the seatbelt requirement for **all** vehicle types.
 |---|---|---|
 | `fee` | `int` | Fine in EGP charged when the seatbelt is not fastened. |
 
-**Behaviour:** If `!obs.isSeatbeltOn()` → returns a `Violation` with description `"Seatbelt not fastned"`.  
-**Name:** `"Seatbelt"`.
 
 ---
 
@@ -136,8 +123,8 @@ Central orchestrator of the system.
 
 | Method | Signature | Description |
 |---|---|---|
-| `addRule` | `void addRule(Rule)` | Registers a new `Rule`. Call before processing observations. |
-| `process` | `Optional<Fine> process(CarObservation)` | Evaluates the observation against every registered rule. Returns a `Fine` if ≥ 1 violation was found, otherwise `Optional.empty()`. |
+| `addRule` | `void addRule(Rule)` | Registers a new `Rule`. Call before processing car. |
+| `process` | `Optional<Fine> process(Car car)` | Evaluates the car against every registered rule. Returns a `Fine` if ≥ 1 violation was found, otherwise `Optional.empty()`. |
 | `getAllFines` | `List<Fine> getAllFines()` | Returns an unmodifiable list of all fines issued so far, each containing the plate number and total amount. |
 | `getViolationStats` | `Map<String, Long> getViolationStats()` | Returns a map of `ruleName → violation count` across all issued fines. Rules with zero violations are omitted. |
 
